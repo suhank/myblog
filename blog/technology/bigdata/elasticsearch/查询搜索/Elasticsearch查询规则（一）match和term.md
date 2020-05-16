@@ -1,0 +1,345 @@
+[TOC]
+
+
+
+# Elasticsearch查询规则（一）match和term
+
+ 
+
+关注
+
+ 0.2 2016.06.25 11:26* 字数 1667 阅读 15298评论 7喜欢 24赞赏 1
+
+es种有两种查询模式，一种是像传递URL参数一样去传递查询语句，被称为简单搜索或**查询字符串(query string)**搜索，比如
+
+```
+GET /megacorp/employee/_search //查询全部员工
+GET /megacorp/employee/_search?q=last_name:Smith //查询last_name为Smith的员工
+```
+
+另外一种是通过DSL语句来进行查询，被称为**DSL查询(Query DSL)**,DSL是Elasticsearch提供的一种丰富且灵活的查询语言，该语言以json请求体的形式出现，通过restful请求与Elasticsearch进行交互，本文主要讲DSL查询的一些常用规则，在介绍之前，我们先简单插入一个测试用的小例子(假设我们已经有了一个elasticsearch测试环境且装好了分词插件, 如果需要查看如何安装中文环境，可浏览我的另一篇文章[Elasticsearch中文搜索环境搭建](https://www.jianshu.com/p/f169e70364d4))。
+
+```
+ $curl -XPOST http://localhost:9200/index/doc/1 -d'{"content":"美国留给伊拉克的是个烂摊子吗","title":"标题","tags":["美国","伊拉克","烂摊子"]}'
+ $curl -XPOST http://localhost:9200/index/doc/2 -d'{"content":"中国是世界上人口最多的国家","title":"中国","tags":["中国","人口"]}'
+ $curl -XPOST http://localhost:9200/index/doc/3 -d'{"content":"同一个世界同一个梦想","title":"北京奥运","tags":["和平"]}'
+ $curl -XPOST http://localhost:9200/index/doc/4 -d'{"content":"杭州是一个美丽的城市,欢迎来到杭州","title":"宣传","tags":["旅游","城市"]}'
+```
+
+检查一下我们的数据是否导入成功
+
+```
+$curl -XGET http://localhost:9200/index/doc/_search
+{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":4,"max_score":1.0,"hits":[{"_index":"index","_type":"doc","_id":"2","_score":1.0,"_source":{"content":"中国是世界上人口最多的国家","title":"中国","tags":["中国","人口"]}},{"_index":"index","_type":"doc","_id":"4","_score":1.0,"_source":{"content":"杭州是一个美丽的城市,欢迎来到杭州","title":"宣传","tags":["旅游","城市"]}},{"_index":"index","_type":"doc","_id":"1","_score":1.0,"_source":{"content":"美国留给伊拉克的是个烂摊子吗","title":"标题","tags":["美国","伊拉克","烂摊子"]}},{"_index":"index","_type":"doc","_id":"3","_score":1.0,"_source":{"content":"同一个世界同一个梦想","title":"北京奥运","tags":["和平"]}}]}}
+```
+
+ok，导入成功，接下来利用这些数据逐步介绍各种常用查询
+
+#### term查询
+
+term是代表完全匹配，也就是精确查询，搜索前不会再对搜索词进行分词，所以我们的搜索词必须是文档分词集合中的一个。比如说我们要找标题为北京奥运的所有文档
+
+```
+$curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+  "query":{
+    "term":{
+        "title":"北京奥运"
+    }
+  }
+}'
+```
+
+将会得到如下结果
+
+```
+{
+    "took": 1,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+    },
+    "hits": {
+    "total": 1,
+    "max_score": 0.92055845,
+    "hits": [
+     {
+        "_index": "index",
+        "_type": "doc",
+        "_id": "3",
+        "_score": 0.92055845,
+        "_source": {
+           "content": "同一个世界同一个梦想",
+           "title": "北京奥运",
+           "tags": [
+               "和平"
+            ]
+        }
+      }
+    ]
+  }
+}
+```
+
+搜索`title`包含`北京`或者`奥运`的，结果也一样，但是如果你搜索词为`京奥`,或者`北京奥`这样的，那么搜索结果将为空
+
+```
+{
+  "took" : 1,
+  "timed_out" : false,
+  "_shards" : {
+      "total" : 5,
+      "successful" : 5,
+      "failed" : 0
+  },
+  "hits" : {
+      "total" : 0,
+      "max_score" : null,
+      "hits" : [ ]
+  }
+}
+```
+
+这是因为在对文档建立索引时，会将北京奥运分词为`北京`，`奥运`，`北京奥运`，只要搜索词为这三个之一，都可以将这篇文章搜索出来，而`京奥`和`北京奥`并不在分词集合里，所以无法搜索到该文档。
+如果对于某个字段，你想精确匹配，即搜索什么词匹配什么词，类似sql中的`=`操作，比如只能通过`北京奥运`搜索到文档3而不想让`北京`和`奥运`也搜索到，那么，你可以在建立索引阶段指定该字段为`"index": "not_analyzed"`,此时，elasticsearch将不会对该字段的值进行分词操作，只保留全文字索引。比如本例子中的tags字段,我在建立索引时设置了`"index": "not_analyzed"`, 搜索时，不管是指定tags为`美`，还是`国`，都无法将第一条结果搜索出来
+
+```
+$curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+  "query":{
+    "term":{
+        "tags":"美"
+    }
+  }
+}'
+```
+
+搜索结果：
+
+```
+{
+  "took" : 1,
+  "timed_out" : false,
+  "_shards" : {
+      "total" : 5,
+      "successful" : 5,
+      "failed" : 0
+  },
+  "hits" : {
+      "total" : 0,
+      "max_score" : null,
+      "hits" : [ ]
+  }
+}
+```
+
+而全词`美国`却可以
+
+```
+$curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+  "query":{
+    "term":{
+        "tags":"美国"
+    }
+  }
+}'
+```
+
+搜索结果：
+
+```
+{
+    "took" : 2,
+    "timed_out" : false,
+    "_shards" : {
+        "total" : 5,
+        "successful" : 5,
+        "failed" : 0
+    },
+    "hits" : {
+        "total" : 1,
+        "max_score" : 0.30685282,
+        "hits" : [ {
+            "_index" : "index",
+            "_type" : "doc",
+            "_id" : "1",
+            "_score" : 0.30685282,
+            "_source" : {
+                  "content" : "美国留给伊拉克的是个烂摊子吗",
+                  "title" : "标题",
+                  "tags" : [ "美国", "伊拉克", "烂摊子" ]
+            }
+      } ]
+  }
+}
+```
+
+#### match类查询
+
+match查询会先对搜索词进行分词,分词完毕后再逐个对分词结果进行匹配，因此相比于term的精确搜索，match是分词匹配搜索,match搜索还有两个相似功能的变种，一个是match_phrase，一个是multi_match，接下来详细介绍一下
+
+###### match
+
+前面提到match搜索会先对搜索词进行分词，对于最基本的match搜索来说，只要搜索词的分词集合中的一个或多个存在于文档中即可，例如，当我们搜索`中国杭州`，搜索词会先分词为`中国`和`杭州`,只要文档中包含`搜索`和`杭州`任意一个词，都会被搜索到
+
+```
+$curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+    "query": {
+        "match": {
+            "content": "中国杭州"
+        }
+    }
+}'
+```
+
+文档3正文中有杭州，文档2中有中国，因此搜索结果有两个，文档3中杭州出现两次，所以排在前面，结果如下：
+
+```
+{
+  "took" : 1,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "failed" : 0
+  },
+  "hits" : {
+      "total" : 2,
+      "max_score" : 0.99999994,
+      "hits" : [ {
+            "_index" : "index",
+            "_type" : "doc",
+            "_id" : "4",
+            "_score" : 0.99999994,
+            "_source" : {
+                 "content" : "杭州是一个美丽的城市,欢迎来到杭州",
+                "title" : "宣传",
+                "tags" : [ "旅游", "城市" ]
+            }
+       }, {
+            "_index" : "index",
+            "_type" : "doc",
+            "_id" : "2",
+            "_score" : 0.8838835,
+            "_source" : {
+                  "content" : "中国是世界上人口最多的国家",
+                  "title" : "中国",
+                  "tags" : [ "中国", "人口" ]
+            }
+       } ]
+    }
+}
+```
+
+同样的，我们用match的方式搜索`中国世界`，那么，文档2(含有`中国`和`世界`)和文档3(含有`世界`都会被搜索出来)。如果我们仅仅想搜索`中国`和`世界`都包含的文档该怎么办呢？
+其实，对于match搜索，可以按照分词后的分词集合的`or`或者`and`进行匹配，默认为`or`，这也是为什么我们看到前面的搜索都是只要有一个分词出现在文档中就会被搜索出来，同样的，如果我们希望是所有分词都要出现，那只要把匹配模式改成`and`就行了
+
+```
+curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+    "query": {
+        "match": {
+            "content": {
+                "query": "中国世界",
+                "operator": "and"
+            }
+        }
+    }
+}'
+```
+
+如上所示，查询时将operator设置为`and`，此时，就只会搜索到既包含中国，也包含世界的文档了(因返回的字段较多，后面搜索结果只展示_source中的内容)
+
+```
+"_source" : {
+    "content" : "中国是世界上人口最多的国家",
+    "title" : "中国",
+    "tags" : [ "中国", "人口" ]
+}
+```
+
+###### match_phrase
+
+match_phrase为按短语搜索，这个可能先用英文来解释会直观一点(中文分词后其实已经是一个一个有具体意思的词语)。英文中以空格分词，因此分词后是一个个的单词，当想搜索类似`hope so`这样的短语时，你或许并不想将一些只含有hope的文档搜索出来，也不想将一些类似`I hope ×××. So ××`这样的搜索出来，此时，就可以用match_phrase。
+match_phrase的搜索方式和match类似，先对搜索词建立索引，并要求所有分词必须在文档中出现(像不像operator为`and`的match查询)，除此之外，还必须满足分词在文档中出现的顺序和搜索词中一致且各搜索词之间必须**紧邻**，因此match_phrase也可以叫做紧邻搜索。
+所以，当我们搜`美国留给`时
+
+```
+curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+  "query": {
+    "match_phrase": {
+        "content": "美国留给"
+    }
+  }
+}'
+```
+
+能搜出文档`美国留给伊拉克的是个烂摊子吗`
+
+```
+    "_source" : {
+        "content" : "美国留给伊拉克的是个烂摊子吗",
+        "title" : "标题",
+        "tags" : [ "美国", "伊拉克", "烂摊子" ]
+    }
+```
+
+但是我们搜索`留给美国`或`美国伊拉克`时，却没有搜索结果，因为一个顺序不对，一个不是紧邻(隔着`留给`)。
+紧邻对于匹配度要求较高，为了减小精度增加可操作性，引入了`slop`参数。该参数可以指定相隔多少个词仍被算作匹配成功。如下，
+
+```
+curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+    "query": {
+        "match_phrase": {
+            "content": {
+                "query": "美国伊拉克",
+                "slop": "1"
+            }
+        }
+    }
+}'
+```
+
+当我们将`slop`设置为1时，文档1已能被搜索到。
+
+```
+  "_source" : {
+    "content" : "美国留给伊拉克的是个烂摊子吗",
+    "title" : "标题",
+    "tags" : [ "美国", "伊拉克", "烂摊子" ]
+  }
+```
+
+需要注意的是，当slop的值过大时(超出文档总分词数)，那么分词数据将可以是随意的，即跟operator为`and`的match查询效果一样。比如我们查询
+
+```
+curl -XGET http://localhost:9200/index/doc/_search?pretty -d 
+'{
+    "query": {
+        "match_phrase": {
+            "content": {
+                "query": "伊拉克美国",
+                "slop": "12"
+            }
+        }
+    }
+}'
+```
+
+将会得到与上面一样的结果
+
+###### multi_match
+
+当我们想对多个字段进行匹配，其中一个字段包含分词就被文档就被搜索到时，可以用multi_match,这一部分内容我们后面再讲
+
+
+
+
+
+<https://www.jianshu.com/p/eb30eee13923>
