@@ -22,24 +22,15 @@ docker cp a2e8b12735e7:/u01/app/oracle /mnt/hgfs/docker/software/oracle/data
 
 <http://stackoverflow.com/questions/22907231/copying-files-from-host-to-docker-container>
 
-### 1.用-v挂载主机数据卷到容器内   这个方式可行
+### 1.用-v挂载主机数据卷到容器内
 
-```sh
-docker commit centos_v1 centos:v1
-#然后停止并删除容器
-#在次运行开始
+```
 docker run -v /path/to/hostdir:/mnt $container  
-#在容器内拷贝  
+在容器内拷贝  
 cp /mnt/sourcefile /path/to/destfile 
 ```
 
  
-
-
-
-
-
-
 
 ### 2.直接在主机上拷贝到容器物理存储系统
 

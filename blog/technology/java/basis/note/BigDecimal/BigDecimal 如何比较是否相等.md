@@ -27,13 +27,13 @@ BigDecmial b = new BigDecimal(2);
 ## 解决办法：
 
 ```java
- if（a.compareTo（b）== 0）  //结果是true
+ if(a.compareTo(b)== 0)  //结果是true
 ```
 
  说明:   
 
 ```
-public int compareTo（BigDecimal val）
+public int compareTo(BigDecimal val)
 ```
 
 将此BigDecimal与指定的BigDecimal进行比较。 两个BigDecimal对象的价值相等但具有不同的比例（如2.0和2.00）被认为是相等的这种方法。
@@ -47,6 +47,7 @@ public int compareTo（BigDecimal val）
        -1，0或1，因为BigDecimal数值小于等于或大于val。
 
  
+
 
 
 https://blog.csdn.net/shadow_zed/article/details/73478298
