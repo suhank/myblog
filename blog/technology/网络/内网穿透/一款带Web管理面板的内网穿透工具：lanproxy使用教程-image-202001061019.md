@@ -87,6 +87,8 @@ service iptables restart
 
 #CentOS 7系统
 firewall-cmd --zone=public --add-port=8090/tcp --permanent 
+firewall-cmd --zone=public --add-port=4900/tcp --permanent 
+firewall-cmd --zone=public --add-port=50000/tcp --permanent
 firewall-cmd --reload
 ```
 

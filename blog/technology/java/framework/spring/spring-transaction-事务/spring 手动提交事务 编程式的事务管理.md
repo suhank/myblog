@@ -46,6 +46,7 @@ public class SimpleService implements Service {
 如果执行事务回调的时候没有返回值，则使用 TransactionCallbackWithoutResult 代替 TransactionCallback，且可以调用 TransactionStatus 对象的 setRollbackOnly() 方法回滚事务：
 
 ```java
+TransactionTemplate transactionTemplate = new TransactionTemplate(bizTransactionManager);
 transactionTemplate.execute(new TransactionCallbackWithoutResult() {
     protected void doInTransactionWithoutResult(TransactionStatus status) {
         try {

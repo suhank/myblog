@@ -40,8 +40,6 @@ Ajax请求具有如下特点：
 
 我们可以为axios添加一个拦截器：
 
-
-
 ```javascript
 import axios from 'axios'
  
@@ -76,11 +74,7 @@ export default axios
 
 ```
 
-
-
 之后我们就可以通过axios中的get请求下载文件了。
-
-
 
 主要代码来自：https://www.zhihu.com/question/263323250/answer/267842980
 
