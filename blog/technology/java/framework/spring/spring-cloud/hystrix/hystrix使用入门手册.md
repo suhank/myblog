@@ -12,7 +12,7 @@
 
 Hystrix是Netflix开源的一款容错系统，能帮助使用者码出具备强大的容错能力和鲁棒性的程序。如果某程序或class要使用Hystrix，只需简单继承`HystrixCommand/HystrixObservableCommand`并重写`run()/construct()`，然后调用程序实例化此class并执行`execute()/queue()/observe()/toObservable()`。
 
-```
+```java
 // HelloWorldHystrixCommand要使用Hystrix功能 
 public class HelloWorldHystrixCommand extends HystrixCommand {  
     private final String name; 
@@ -28,7 +28,7 @@ public class HelloWorldHystrixCommand extends HystrixCommand {
 } 
 ```
 
-```
+```java
 /* 调用程序对HelloWorldHystrixCommand实例化，执行execute()即触发HelloWorldHystrixCommand.run()的执行 */ 
 String result = new HelloWorldHystrixCommand("HLX").execute();
 System.out.println(result);  // 打印出Hello HLX 
@@ -122,7 +122,7 @@ hystrix支持N个请求自动合并为一个请求，这个功能在有网络交
 
 - HystrixCommandProperties
 
-```
+```java
 /* --------------统计相关------------------*/ 
 // 统计滚动的时间窗口,默认:5000毫秒（取自circuitBreakerSleepWindowInMilliseconds）   
 private final HystrixProperty metricsRollingStatisticalWindowInMilliseconds;   
@@ -167,7 +167,7 @@ private final HystrixProperty requestCacheEnabled; // Whether request caching is
 
 - HystrixCollapserProperties
 
-```
+```java
 //请求合并是允许的最大请求数,默认: Integer.MAX_VALUE   
 private final HystrixProperty maxRequestsInBatch;   
 //批处理过程中每个命令延迟的时间,默认:10毫秒   
@@ -178,7 +178,7 @@ private final HystrixProperty requestCacheEnabled;
 
 - HystrixThreadPoolProperties
 
-```
+```java
 /* 配置线程池大小,默认值10个. 建议值:请求高峰时99.5%的平均响应时间 + 向上预留一些即可 */ 
 private final HystrixProperty corePoolSize; 
 /* 配置线程值等待队列长度,默认值:-1 建议值:-1表示不等待直接拒绝,测试表明线程池使用直接决绝策略+ 合适大小的非回缩线程池效率最高.所以不建议修改此值。 当使用非回缩线程池时，queueSizeRejectionThreshold,keepAliveTimeMinutes 参数无效 */
