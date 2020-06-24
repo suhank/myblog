@@ -1,8 +1,4 @@
-# Guava并发：RateLimiter限制资源的并发访问线程数,限流
-
-D:\backup\studio\AvailableCode\basis\guava\guava_demo :RateLimiterTest
-
-
+# Guava并发：RateLimiter限制资源的并发访问线程数
 
 RateLimiter类似于JDK的信号量Semphore，他用来限制对资源并发访问的线程数，本文介绍RateLimiter使用
 
