@@ -25,7 +25,7 @@ Feign通过配置注入一个模板化请求进行工作。只需在发送之前
 
 Java
 
-```
+```java
 interface GitHub {
   @RequestLine("GET /repos/{owner}/{repo}/contributors")
   List<Contributor> contributors(@Param("owner") String owner, @Param("repo") String repo);
@@ -76,7 +76,7 @@ Feign可以提供多种API 接口。这些都被定义为Target<T>（默认为 H
 
 Java
 
-```
+```java
 Feign feign = Feign.builder().build();
 CloudDNS cloudDNS = feign.target(new CloudIdentityTarget<CloudDNS>(user, apiKey));
 ```

@@ -10,7 +10,7 @@
 
 Feign是一种声明式、模板化的HTTP客户端。在Spring Cloud中使用Feign, 我们可以做到使用HTTP请求远程服务时能与调用本地方法一样的编码体验，开发者完全感知不到这是远程方法，更感知不到这是个HTTP请求。比如：
 
-```
+```java
 @Autowired
 private AdvertGropRemoteService service; // 远程服务
 
@@ -23,7 +23,7 @@ public AdvertGroupVO foo(Integer groupId) {
 
 maven配置:
 
-```
+```xml
         <!-- 使用Apache HttpClient替换Feign原生httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -55,7 +55,7 @@ Feign在默认情况下使用的是JDK原生的`URLConnection`发送HTTP请求�
 
 Feign定义:
 
-```
+```java
 import com.migr.common.ws.ResponseBean;
 import feign.Param;
 import feign.RequestLine;
@@ -72,7 +72,7 @@ public interface AOranService{
 
 如何调用:
 
-```
+```java
         //这一段完全可以做声工具类或者单例实现
         // http://base.dianxiaohuocy.net/api 为接口地址
         AOranService oranService = Feign.builder()
@@ -92,15 +92,9 @@ public interface AOranService{
         ResponseBean str = oranService.findParentOrgan("findParentOrgan", reqJson, token);
 ```
 
- 
-
- 
-
- 
-
 所调用的接口:
 
-```
+```java
     @RequestMapping(value = "/exec")
     @ResponseBody
     public Object exec(@RequestParam(value = "m", required = true) String m,
