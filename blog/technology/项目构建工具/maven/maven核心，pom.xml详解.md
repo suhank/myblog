@@ -297,36 +297,41 @@ pluginManagement的作用类似于denpendencyManagement,只是denpendencyManagem
 
 例如：
 
+```
 <pluginManagement> 
+  <plugins> 
+    <plugin> 
+      <groupId>org.apache.maven.plugins</groupId> 
+      <artifactId>maven-jar-plugin</artifactId> 
+      <version>2.2</version> 
+      <executions> 
+        <execution> 
+          <id>pre-process-classes</id> 
+          <phase>compile</phase> 
+          <goals> 
+            <goal>jar</goal> 
+          </goals> 
+          <configuration> 
+            <classifier>pre-process</classifier> 
+          </configuration> 
+        </execution> 
+      </executions> 
+    </plugin> 
+  </plugins> 
+</pluginManagement> 
+```
 
-​      <plugins> 
-​        <plugin> 
-​          <groupId>org.apache.maven.plugins</groupId> 
-​          <artifactId>maven-jar-plugin</artifactId> 
-​          <version>2.2</version> 
-​          <executions> 
-​            <execution> 
-​              <id>pre-process-classes</id> 
-​              <phase>compile</phase> 
-​              <goals> 
-​                <goal>jar</goal> 
-​              </goals> 
-​              <configuration> 
-​                <classifier>pre-process</classifier> 
-​              </configuration> 
-​            </execution> 
-​          </executions> 
-​        </plugin> 
-​      </plugins> 
-​    </pluginManagement> 
 子pom引用方法： 
 在pom的build里的plugins引用： 
-​    <plugins> 
-​      <plugin> 
-​        <groupId>org.apache.maven.plugins</groupId> 
-​        <artifactId>maven-jar-plugin</artifactId> 
-​      </plugin> 
-​    </plugins>
+
+```
+<plugins> 
+   <plugin> 
+     <groupId>org.apache.maven.plugins</groupId> 
+     <artifactId>maven-jar-plugin</artifactId> 
+   </plugin> 
+</plugins>
+```
 
  
 
