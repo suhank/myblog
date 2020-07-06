@@ -87,7 +87,7 @@ public class DataSourceConfig {
 
 顺便把相关的依赖贴上，值得注意的是  spring-boot-starter-jta-atomikos 依赖，这是一个开源的事务管理器类。
 
-```
+```xml
 <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -123,7 +123,7 @@ public class DataSourceConfig {
 
 模拟场景：用户下单成功后，他的账户持仓应该对应增加，如果持仓更新失败，则他的下单操作也需要回滚。
 
-```
+```java
 /**
  * Created by zhangjunwei on 2017/8/2.
  */
