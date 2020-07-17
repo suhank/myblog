@@ -53,20 +53,24 @@ public class SpringMVCConfig implements WebMvcConfigurer {
 
 ```java
 @Configuration
-public class WebConfig extends WebMvcConfigurationSupport {
+public class WebConfig implements WebMvcConfigurer {
+    
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //解决中文乱码
+        converters.add(new StringHttpMessageConverter(
+                StandardCharsets.UTF_8));
+
+        //jackson自定义序列化配置
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
-        /**
-         * 日期全局格式化
-         * */
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));//GMT+8
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));//日期全局格式化
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));//时区
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);//解决没有匹配到对应字段报错：springmvc @RequestBody问题：Unrecognized field , not marked as ignorable
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        converters.add(jackson2HttpMessageConverter);
 
+        //将convert添加到converters当中.  注意添加在列表的前面才能生效
+        converters.add(0, jackson2HttpMessageConverter);
     }
 }
 ```
