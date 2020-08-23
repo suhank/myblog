@@ -20,7 +20,7 @@
 StringTokenizer st1 = new StringTokenizer("www ooobj com");
         while (st1.hasMoreElements()) {
             System.out.println("Token1:" + st1.nextToken());
-        }1234
+        }
 ```
 
 Token1:www 

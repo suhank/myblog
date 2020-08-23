@@ -6,24 +6,6 @@
 
  
 
-字数 369
-
-  
-
- 
-
- 收藏 0
-
- 
-
-点赞 0
-
-  
-
-
-
-[【推荐阅读】微服务还能火多久？>>> ![img](https://www.oschina.net/img/hot3.png)](https://www.oschina.net/action/visit/ad?id=1147)
-
 ## 一、 场景
 
 在数据表结构设计的时候有同时存在唯一索引和逻辑删除，通常逻辑删除`is_deleted`是取值范围`0`、`1`，当删除同一个唯一索引字段值时，就会失败。
