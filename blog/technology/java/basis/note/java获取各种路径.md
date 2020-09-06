@@ -163,7 +163,7 @@ InputStream in = ReadFile.class.getResourceAsStream("/com/lavasoft/res/a.txt");
 
 
 ```java
-String classPath = Thread.currentThread().getContextClassLoader().getResource("/").getPath();
+String classPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
 System.out.println("classPath = " + classPath);
 ```
 

@@ -1,6 +1,49 @@
 # java 8系列之Stream的基本语法详解
 
- 
+<!-- TOC -->
+
+- [java 8系列之Stream的基本语法详解](#java-8系列之stream的基本语法详解)
+- [概述](#概述)
+- [聚合操作](#聚合操作)
+- [Stream](#stream)
+    - [如何使用Stream?](#如何使用stream)
+    - [Stream的操作分类](#stream的操作分类)
+    - [惰性求值和及早求值方法](#惰性求值和及早求值方法)
+- [创建Stream](#创建stream)
+    - [静态工厂方法](#静态工厂方法)
+        - [of](#of)
+        - [generator](#generator)
+        - [iterate](#iterate)
+        - [empty](#empty)
+    - [Collection接口和数组的默认方法](#collection接口和数组的默认方法)
+- [其他](#其他)
+- [Intermediate 中间](#intermediate-中间)
+    - [concat](#concat)
+    - [distinct](#distinct)
+    - [filter](#filter)
+    - [map](#map)
+    - [flatMap](#flatmap)
+    - [peek](#peek)
+    - [skip](#skip)
+    - [sorted](#sorted)
+- [Terminal 最终](#terminal-最终)
+    - [collect](#collect)
+    - [count](#count)
+    - [forEach](#foreach)
+    - [forEachOrdered](#foreachordered)
+    - [max](#max)
+    - [min](#min)
+    - [reduce](#reduce)
+- [Short-circuiting  短循环](#short-circuiting--短循环)
+    - [allMatch](#allmatch)
+    - [anyMatch](#anymatch)
+    - [findAny](#findany)
+    - [findFirst](#findfirst)
+    - [limit](#limit)
+    - [noneMatch](#nonematch)
+- [参考资料](#参考资料)
+
+<!-- /TOC -->
 
 Stream系列：
 
