@@ -54,6 +54,7 @@ transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             updateOperation2();
         } catch (SomeBusinessExeption ex) {
             status.setRollbackOnly();
+            throw e;
         }
     }
 });

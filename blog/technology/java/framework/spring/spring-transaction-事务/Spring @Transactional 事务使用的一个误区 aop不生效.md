@@ -50,6 +50,15 @@ ServiceFacade 调用service的methodA方法的时候，实际上执行的是serv
 
 **2，事务方法调用同一个类里面的另一个事务方法，被调用的方法事务会失效，因为spring的事务是基于代理类来实现的。在controller里的service其实是代理对象，所以b方法的事务有效。解决方法很简单，在a方法类获取当前对象的代理对象 IService s=(IService)AopContext.currentProxy();  s.b();前提要在spring中配置，<aop:aspectj-autoproxy expose-proxy="true"/>  expose-proxy="true" 表示将当前代理对象暴露出去，不然 AopContext.currentProxy() 或得的是 null .**
 
+maven
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+```
+
 xml配置
 
 ```
