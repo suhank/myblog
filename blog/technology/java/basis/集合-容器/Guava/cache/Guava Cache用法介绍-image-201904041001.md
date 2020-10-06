@@ -105,7 +105,7 @@ public class StudyGuavaCache {
 
 下面代码是expireAfterAccess的例子。
 
-```
+```java
 public class StudyGuavaCache {
     public static void main(String[] args) throws InterruptedException {
         Cache<String,String> cache = CacheBuilder.newBuilder()

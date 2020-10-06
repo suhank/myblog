@@ -1,6 +1,6 @@
 # apache commons collections CollectionUtils工具类简单使用
 
-```
+```java
 import org.apache.commons.collections.CollectionUtils;
   
 import java.util.ArrayList;
