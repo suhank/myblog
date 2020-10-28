@@ -29,8 +29,8 @@
 ### 1.1 `npm-check`安装
 
 ```
-> npm install -g npm-check //全局安装。项目下安装可自行选择
-> npm install npm-check    //项目下安装，项目根目录执行
+npm install -g npm-check //全局安装。项目下安装可自行选择
+npm install npm-check    //项目下安装，项目根目录执行
 ```
 
 ### 1.2 `npm-check`项目依赖包更新
@@ -38,7 +38,7 @@
 （1）查看包更新信息，会有小黄脸提示你包的相关情况（需更新，缺失，错误以及未使用等）（表情包大牛。。。）
 
 ```
-> npm-check
+npm-check
 ```
 
 ![npm-check-2](image-201810101127/bVUCMo.png)
@@ -46,7 +46,7 @@
 （2）更新包。分类别展示，使用空格选择包，然后enter开始更新。自动更新`package.json`内的相关包信息
 
 ```
-> npm-check -u //-update
+npm-check -u //-update
 ```
 
 ![npm-check-3](image-201810101127/bVUCO8.png)
