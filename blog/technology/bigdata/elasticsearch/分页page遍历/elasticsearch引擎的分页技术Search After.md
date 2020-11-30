@@ -15,15 +15,11 @@ Categories：[数据库](http://www.piaoyi.org/database/) PostTime：2018-6-5 10
 
 对于深度分页，es推荐使用 scroll 接口，详情请查看《[Elasticsearch普通分页from&size VS scroll滚动分页](http://www.piaoyi.org/database/Elasticsearch-from-size-scroll.html)》。注意，scroll接口不适合用在实时搜索的场景里。
 
-
-
 从es 5.0版本开始，es提供了新的参数 search_after 来解决这个问题，search_after 提供了一个活的游标来拉取从上次返回的最后一个请求开始拉取下一页的数据。
-
-
 
 假设我们拉取的第一页请求如下:
 
-```
+```http
 GET twitter/tweet/_search
 {
     "size": 10,

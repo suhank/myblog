@@ -2,8 +2,6 @@
 
 [关于父组件传参给子组件，可以看我另一篇文章](http://www.cnblogs.com/Mrrabbit/p/8474338.html)
 
- 
-
 教程开始：
 
 我们要实现的效果是：在子组件的Input框输入，父组件中实时更新显示。(也就是把子组件中的数据传给父组件)
@@ -12,7 +10,7 @@
 
 template部分
 
-```
+```html
 <template>
   <section>
     <input v-model="message"/>
@@ -22,7 +20,7 @@ template部分
 
 js部分
 
-```
+```html
 <script>
 export default {
   data(){
@@ -40,19 +38,13 @@ export default {
 </script>
 ```
 
-
-
 其实不一定要用wacth来监听数据变化，直接给input加个输入事件，也是可以的。
-
- 
 
 ## 二、父组件代码
 
 template部分
 
-
-
-```
+```html
 <template>
   <div id="app">
     <!--getMessage是子组件那边定义的 自定义事件-->
@@ -64,13 +56,9 @@ template部分
 </template>
 ```
 
-
-
 js部分
 
-
-
-```
+```html
 <script>
 import test from './components/header'
 export default {
@@ -91,10 +79,6 @@ export default {
 </script>
 ```
 
-
-
- 
-
 ## 总结：
 
 1.子组件传参给父组件主要是通过$emit方法来实现的。
@@ -102,8 +86,6 @@ export default {
 2.在子组件中使用$emit方法，一般它接受两个参数，第一个是自定义事件(这个事件在父组件中需要用到)，第二个参数就是需要传的数据了。
 
 3.而在父组件里，在调用的标签上引用子组件定义的那个事件，然后事件绑定一个函数。在函数里面进行赋值即可。
-
-
 
 
 

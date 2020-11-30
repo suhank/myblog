@@ -8,7 +8,7 @@
 
 在fastjson中提供了一个用于处理泛型反序列化的类TypeReference。
 
-```
+```java
 import com.alibaba.fastjson.TypeReference;
 
 List<VO> list = JSON.parseObject("...", new TypeReference<List<VO>>() {});
@@ -16,7 +16,7 @@ List<VO> list = JSON.parseObject("...", new TypeReference<List<VO>>() {});
 
 如下写法有更好的性能
 
-```
+```java
 import com.alibaba.fastjson.TypeReference;
 
 final static Type type = new TypeReference<List<VO>>() {}.getType();
@@ -32,7 +32,7 @@ List<VO> list = JSON.parseObject("...", type);
 
 ## 2.1. 单参数例子
 
-```
+```java
 public class Response<T> {
      public T data;
 }
@@ -44,7 +44,7 @@ public static <T> Response<T> parseToMap(String json, Class<T> type) {
 
 ## 2.2. 双参数例子
 
-```
+```java
 public static <K, V> Map<K, V> parseToMap(String json, 
                                             Class<K> keyType, 
                                             Class<V> valueType) {

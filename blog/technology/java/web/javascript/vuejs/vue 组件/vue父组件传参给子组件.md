@@ -20,7 +20,7 @@
 
 template部分
 
-```
+```html
 <template>
   <section class="chind">
     <div>{{userName}}</div>
@@ -30,7 +30,7 @@ template部分
 
 js部分
 
-```
+```html
 <script>
 export default {
   props:['userName']//主要是通过props来接受父组件传过来的值
@@ -46,7 +46,7 @@ export default {
 
 template部分
 
-```
+```html
 <template>
   <section class="chind">
     <!--注意下面的userName和子组件props里面的参数要一致-->
@@ -59,7 +59,7 @@ template部分
 
 js部分
 
-```
+```html
 <script>
 //引入子组件 名称可以随意 我这边是test
 import test from './components/header'
