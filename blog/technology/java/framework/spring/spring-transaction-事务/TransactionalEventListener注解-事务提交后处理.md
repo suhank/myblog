@@ -9,8 +9,6 @@
 配置修改后发送更新事件等。
 但是，数据库的操作如果还未完成，此时异步调用的方法查询数据库发现没有数据，这就会出现问题。伪代码如下：
 
-
-
 ```csharp
 void saveUser(User u) {
     //保存用户信息
@@ -41,8 +39,6 @@ void onSaveUserEvent(SaveUserEvent event) {
 
 仍旧是上述给用户发短信的例子，代码如下：
 
-
-
 ```csharp
 @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 void onSaveUserEvent(SaveUserEvent event) {
@@ -54,8 +50,6 @@ void onSaveUserEvent(SaveUserEvent event) {
 ```
 
 这样，只有当前事务提交之后，才会执行事件监听器的方法。其中参数phase默认为AFTER_COMMIT，共有四个枚举：
-
-
 
 ```dart
 /**
@@ -116,6 +110,10 @@ void onSaveUserEvent(SaveUserEvent event) {
 
 
 
+代码: 
 
+```
+event-事件监听机制-观察者模式-事务成功提交后在处理逻辑\event-listener-demo\src\test\java\com\practice\event\spring\TeacherPublisherTest.java
+```
 
 https://www.jianshu.com/p/6f9cc1384cdf
