@@ -239,6 +239,8 @@ auto-aof-rewrite-percentage 0
 - 定时任务运行时，把太旧的文件进行删除。例如只保留48小时的按小时创建的快照和一到两个月的按天创建的快照。
 - 每天确保一次把快照文件传输到数据中心外的地方进行保存，至少不能保存在Redis服务所在的服务器。
 
+
+
 ## 参考
 
 [http://redis.io/topics/persistence](http://redis.io/topics/persistence)
