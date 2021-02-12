@@ -16,8 +16,6 @@
 
 我们开始先开始写服务器端的handler,继承ChannelInboundHandlerAdapter，我们先重写userEventTriggered方法，这个方法我们前面讲过，如果超时则会触发相应的超时事件
 
-
-
 ## 实例
 
 ### HeartBeatServerHandler.java
@@ -319,6 +317,6 @@ inactive的事件触发了，且客户端自动停止了~
 
 
 
-
+D:\backup\studio\AvailableCode\framework\rpc-远程服务调用\netty\netty-demo\src\main\java\com\waylau\netty\demo\heartbeat
 
 https://blog.csdn.net/linuu/article/details/51404264

@@ -139,7 +139,7 @@ public class ServerBootstrap {
 
 5.1. 首先创建代理相关的类
 
-```
+```java
 public class RpcConsumer {
 
   private static ExecutorService executor = Executors
@@ -201,7 +201,7 @@ public class RpcConsumer {
 
 看看 HelloClientHandler 的实现：
 
-```
+```java
 public class HelloClientHandler extends ChannelInboundHandlerAdapter implements Callable {
 
   private ChannelHandlerContext context;
@@ -294,6 +294,6 @@ are you ok ? -----> I am fine.
 
 
 
-
+D:\backup\studio\AvailableCode\framework\rpc-远程服务调用\netty\netty-demo\src\main\java\com\waylau\netty\demo\rpc
 
 https://juejin.im/post/5ab86713f265da2398673ff2
