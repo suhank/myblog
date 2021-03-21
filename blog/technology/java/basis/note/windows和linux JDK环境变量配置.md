@@ -33,11 +33,17 @@ c.新建 CLASSPATH
 
 - JAVA_HOME环境变量。它指向jdk的安装目录，Eclipse/NetBeans/Tomcat等软件就是通过搜索JAVA_HOME变量来找到并使用安装好的jdk。
 
+```
+vim /etc/profile
+```
+
+
+
 
 ```sh
 #linux:
 #set java environment
-JAVA_HOME=/usr/local/java/jdk1.7.0_67
+JAVA_HOME=/usr/local/java/jdk1.8.0_281
 PATH=$PATH:$JAVA_HOME/bin
 CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 export JAVA_HOME CLASSPATH PATH

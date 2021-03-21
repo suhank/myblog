@@ -154,7 +154,7 @@ mvn package assembly:single
 
 在pom.xml中配置：
 
-```
+```xml
 <build>
 	<plugins>
 		<plugin>
@@ -163,6 +163,7 @@ mvn package assembly:single
 			<version>2.4.1</version>
 			<executions>
 				<execution>
+				  	<id>shade-my-jar</id>
 					<phase>package</phase>
 					<goals>
 						<goal>shade</goal>

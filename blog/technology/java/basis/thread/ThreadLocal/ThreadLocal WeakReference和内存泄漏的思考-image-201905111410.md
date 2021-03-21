@@ -8,7 +8,7 @@
 
 ThreadLocal是一个有点“特殊”的类，它的实例的生命周期要和当前运行的线程强绑定。当new了一个ThreadLocal实例，并且调用set方法设置值的时候，会创建一个内部类实例ThreadLocalMap，这个Map的entry如下：
 
-```
+```java
 ThreadLocalMap的entry java
 static class Entry extends WeakReference<ThreadLocal<?>> {
            /** The value associated with this ThreadLocal. */
@@ -27,8 +27,8 @@ key是ThreadLocal实例本身,value是具体的值。这里entry的key使用了�
 ### java引用
 
 1. 强引用（StrongReference）：存在就不会被gc回收，空间不足时报error
-2. 软引用（SoftReference）：当空间不足时才会被gc回收。
-3. 弱引用（WeakReference）：gc过程扫描到就会被回收。
+2. 软引用（SoftReference）：当空间不足时才会被gc回收。（前提是没有强引用指向被引用对象）
+3. 弱引用（WeakReference）：gc过程扫描到就会被回收。 （前提是没有强引用指向被引用对象）
 
 ### 内存泄漏场景和原因
 
@@ -56,7 +56,9 @@ key是ThreadLocal实例本身,value是具体的值。这里entry的key使用了�
 ### 为什么用weakReference?
 
 1. 为什么ThreadLocalMap的key用弱引用，为什么不用强引用呢?
-   这里的弱引用可以首先由gc来判断ThreadLocal实例是否真的可以回收，由gc回收的结果，间接告诉我们，key为null了，这时候value也可以被清理了，并且最终通过高频操作get/set/remove封装好的方法进行清理。如果用强引用那么我们一直不知道这个entry是否可以被回收，除非强制每个coder在逻辑执行完的最后进行一次全局清理。
+
+   将Entry的Key设置成弱引用，在配合线程池使用的情况下可能会有内存泄露的风险。之设计成弱引用的目的是为了更好地对ThreadLocal进行回收，当我们在代码中将ThreadLocal的强引用置为null后，这时候Entry中的ThreadLocal理应被回收了，但是如果Entry的key被设置成强引用则该ThreadLocal就不能被回收，这就是将其设置成弱引用的目的。
+
 2. 为什么value不用弱引用呢？
    value不像key那样，还有一个外部的强引用，可能在业务执行过程中发生了gc，value被清理了，业务后边取值会出错的。
 

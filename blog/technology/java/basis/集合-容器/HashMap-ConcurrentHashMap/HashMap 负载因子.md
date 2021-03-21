@@ -4,8 +4,6 @@
 
 在HashMap的构造函数有以下三种：
 
- 
-
 - HashMap()：构建一个初始容量为 16，负载因子默认为 0.75 的 HashMap。
 - HashMap(int initialCapacity)：构建一个初始容量为 initialCapacity，负载因子为 0.75 的 HashMap。
 - HashMap(int initialCapacity, float loadFactor)：以指定初始容量、指定的负载因子创建一个 HashMap。
