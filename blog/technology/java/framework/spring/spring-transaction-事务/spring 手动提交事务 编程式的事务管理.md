@@ -52,7 +52,7 @@ transactionTemplate.execute(new TransactionCallbackWithoutResult() {
         try {
             updateOperation1();
             updateOperation2();
-        } catch (SomeBusinessExeption ex) {
+        } catch (SomeBusinessExeption e) {
             status.setRollbackOnly();
             throw e;
         }
@@ -88,7 +88,34 @@ TransactionTemplate 的事务设置可以通过编程方式或配置文件指定
   </bean>
   ```
 
-  
+
+
+
+
+
+demo
+
+```java
+    @Resource(name = "mstTransManager")
+    private PlatformTransactionManager mstTransManager;
+
+
+	TransactionTemplate transactionTemplate = new TransactionTemplate(mstTransManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    updateOperation1();
+                    updateOperation2();
+                } catch (Exception e) {
+                    status.setRollbackOnly();
+                    throw e;
+                }
+            }
+        });
+
+```
+
+
 
 ### 2, PlatformTransactionManager方式
 
