@@ -16,8 +16,6 @@ Java界中Redis，Memcached，Cassandra，HBase，Lucene都用它。
 
 ## 一.实现类
 
- 
-
 ```java
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
