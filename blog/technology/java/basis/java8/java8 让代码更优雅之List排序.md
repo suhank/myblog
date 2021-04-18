@@ -216,9 +216,53 @@ public void testSort_with_multipleComparator_composition() throws Exception {
 }
 ```
 
+## demo
+
+```java
+public static void main(String[] args) {
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        class Human {
+
+            private String name;
+            private int age;
+
+        }
+        ArrayList<Human> humans = Lists.newArrayList(
+                new Human("tomy", 22),
+                new Human("tomy", 20),
+                null,
+                new Human(null, 21),
+                new Human("tomy", 25)
+        );
+
+        //先排序name 再排序 age 升序
+        Comparator<Human> humanComparator = Comparator
+                .comparing(Human::getName, Comparator.nullsLast(String::compareTo))//对象属性值name为null则排序在最后
+                .thenComparing(Human::getAge, Comparator.nullsLast(Integer::compareTo));//对象属性值age为null则排序在最后
+        //先排序name 再排序 age 降序
+//        Comparator<Human> humanComparator = Comparator
+//                .comparing(Human::getName, Comparator.nullsLast(String::compareTo)).reversed()//对象属性值name为null则排序在最后
+//                .thenComparing(Human::getAge, Comparator.nullsLast(Integer::compareTo)).reversed();//对象属性值age为null则排序在最后
+        humanComparator = Comparator.nullsLast(humanComparator);//对象为null则排序在最后
+        humans.sort(humanComparator);
+        System.out.println(humans);
+
+    }
+```
+
+
+
 ## 总结
 
 JDK8真的是一个非常值得我们学习的版本，它提供了Lambda表达式，带来了函数式编程的理念，让JAVA代码更优雅
+
+
+
+
+
+
 
 
 
