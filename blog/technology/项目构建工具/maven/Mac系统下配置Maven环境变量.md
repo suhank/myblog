@@ -8,9 +8,11 @@
 
 4、输入Maven安装包路径：
 
+```
 export M2_HOME=/Library/apache-maven-3.3.9
 
-`export PATH=$PATH:$M2_HOME/bin`
+export PATH=$PATH:$M2_HOME/bin
+```
 
 保存修改并关闭.bash_profile；
 
